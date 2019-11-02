@@ -1,0 +1,23 @@
+{
+  "name": "Lira_Bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caldwell-bob/Lira_Bot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/caldwell-bob/Lira_Bot/issues"
+  },
+  "homepage": "https://github.com/caldwell-bob/Lira_Bot#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0"
+  }
+}
