@@ -29,8 +29,17 @@ function concertThis() {
       console.log(response.status);
     //   console.log(response);
       var responseData = response.data;
-      console.log(responseData).length;
-      //   console.log("The movie's rating is: " + response.data.imdbRating);
+      console.log(responseData.length);
+      
+
+      for (var i=0; i < responseData.length; i ++) {
+        //   console.log("Venue: " + responseData[i].venue.name + " - " + responseData[i].datetime);
+          var location = responseData[i].venue.city + ", " + responseData[i].venue.region;
+          console.log("Venue: " + responseData[i].venue.name + " - " + responseData[i].datetime + " in " + location);
+        //   console.log(responseData[i].venue);
+      }
+
+
     })
     .catch(function(error) {
       if (error.response) {
