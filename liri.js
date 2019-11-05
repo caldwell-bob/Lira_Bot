@@ -43,7 +43,9 @@ function concertThis() {
             var location =
               responseData[i].venue.city + ", " + responseData[i].venue.region;
             // console.log("Show ID: " + i);
-            console.log("Show ID:" + i  + "     Venue: " + responseData[i].venue.name);
+            console.log(
+              "Show ID:" + i + "     Venue: " + responseData[i].venue.name
+            );
             console.log("               " + responseData[i].datetime);
             // TODO Fix outut of the date MM/DD/YY
             //   console.log("     " + moment((responseData[i].datetime).format('MM/DD/YY')));
@@ -77,30 +79,31 @@ function concertThis() {
 }
 
 function spotifyThis() {
-    if (!artist) {
-      artist = "The Sign";
+  if (!artist) {
+    artist = "The Sign";
+  }
+  spotify.search({ type: "track", query: artist }, function(err, data) {
+    if (err) {
+      return console.log("Error occurred: " + err);
     }
-    spotify.search({ type: "track", query: artist }, function(err, data) {
-      if (err) {
-        return console.log("Error occurred: " + err);
-      }
-  
-      var items = data.tracks.items;
-  
-      console.log(Object.getOwnPropertyNames(items));
-      console.log(items["0"]);
-      // itemRecord = JSON.parse(items["0"].artists);
-  
-      artistRecord = JSON.parse(JSON.stringify(items["0"].artists));
-      albumRecord = JSON.parse(JSON.stringify(items["0"].album));
-      previewUrl = JSON.parse(JSON.stringify(items["0"].preview_url));
-  
-      console.log("Artist: " + artistRecord["0"].name);
+
+    var items = data.tracks.items;
+    console.log("There are " + items.length + " results from that search.");
+
+    for (var i = 0; i < items.length; i++) {
+      artistRecord = JSON.parse(JSON.stringify(items[i].artists));
+      albumRecord = JSON.parse(JSON.stringify(items[i].album));
+      previewUrl = JSON.parse(JSON.stringify(items[i].preview_url));
+
+      console.log("Artist: " + artistRecord[0].name);
       console.log("Song: " + artist);
       console.log("Preview Url: " + previewUrl);
-      console.log("Album: " + albumRecord.name);
-    });
-  }
+      console.log("Album: " + albumRecord.name + "\n");
+
+    }
+
+  });
+}
 
 function movieThis() {
   console.log("In movieThis()");
@@ -133,7 +136,6 @@ function movieThis() {
 }
 
 function doWhatItSays() {
- 
   fs.readFile("random.txt", "utf8", function(error, data) {
     // If the code experiences any errors it will log the error to the console.
     if (error) {
@@ -155,36 +157,34 @@ function doWhatItSays() {
 }
 
 function main() {
-    switch (command) {
-        case "concert-this":
-          concertThis();
-          break;
-      
-        case "spotify-this-song":
-          spotifyThis();
-          break;
-      
-        case "movie-this":
-          movieThis();
-          break;
-      
-        case "do-what-it-says":
-          doWhatItSays();
-          break;
-      
-        default:
-          if (typeof command === "undefined") {
-            console.log("No arguement passed:");
-          } else {
-            console.log("Invalid argument passed: " + command);
-          }
-          console.log(
-            "concert-this | spotify-this-song | movie-this | do-what-it-says"
-          );
-          console.log("example: node lira concert-this Phish");
-      }
+  switch (command) {
+    case "concert-this":
+      concertThis();
+      break;
 
+    case "spotify-this-song":
+      spotifyThis();
+      break;
+
+    case "movie-this":
+      movieThis();
+      break;
+
+    case "do-what-it-says":
+      doWhatItSays();
+      break;
+
+    default:
+      if (typeof command === "undefined") {
+        console.log("No arguement passed:");
+      } else {
+        console.log("Invalid argument passed: " + command);
+      }
+      console.log(
+        "concert-this | spotify-this-song | movie-this | do-what-it-says"
+      );
+      console.log("example: node lira concert-this Phish");
+  }
 }
 
 main();
-
