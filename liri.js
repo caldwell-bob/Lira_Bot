@@ -2,20 +2,14 @@ require("dotenv").config();
 
 // Include the axios npm package (Don't forget to run "npm install axios" in this folder first!)
 var axios = require("axios");
+var keys = require("./keys.js");
 
 var Spotify = require("node-spotify-api");
 var spotify = new Spotify(keys.spotify);
 
-var keys = require("./keys.js");
-
 var myArgvs = process.argv;
-
 var command = myArgvs[2];
 var artist = myArgvs[3];
-
-function doWhatItSays() {
-    
-}
 
 function concertThis() {
   // Then run a request with axios to the OMDB API with the movie specified
