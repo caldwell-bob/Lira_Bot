@@ -3,19 +3,21 @@ require("dotenv").config();
 // Include the axios npm package (Don't forget to run "npm install axios" in this folder first!)
 var axios = require("axios");
 
-// var keys = require("./keys.js");
+var Spotify = require("node-spotify-api");
+
+var keys = require("./keys.js");
+// console.log("Here I am!");
 // console.log(keys);
-// TODO why does the following fail -
-// var spotify = new Spotify(keys.spotify);
+
+var spotify = new Spotify(keys.spotify);
 
 var myArgvs = process.argv;
 // for (var i=0; i < myArgvs.length; i++){
 //     console.log(i + "  = " + myArgvs[i]);
 // }
 
-var operand = myArgvs[2];
+var command = myArgvs[2];
 var artist = myArgvs[3];
-console.log("x is " + myArgvs[2]);
 
 function concertThis() {
   // Then run a request with axios to the OMDB API with the movie specified
@@ -26,20 +28,35 @@ function concertThis() {
         "/events?app_id=codingbootcamp"
     )
     .then(function(response) {
-      console.log(response.status);
-    //   console.log(response);
-      var responseData = response.data;
-      console.log(responseData.length);
-      
-
-      for (var i=0; i < responseData.length; i ++) {
-        //   console.log("Venue: " + responseData[i].venue.name + " - " + responseData[i].datetime);
-          var location = responseData[i].venue.city + ", " + responseData[i].venue.region;
-          console.log("Venue: " + responseData[i].venue.name + " - " + responseData[i].datetime + " in " + location);
-        //   console.log(responseData[i].venue);
+      // Print any non 200 status code
+      if (response.status != 200) {
+        console.log(response.status);
       }
-
-
+      // check if there was an artist passed at cli
+      if (!artist) {
+        console.log("You aint got no artist...try again");
+      } else {
+        var responseData = response.data;
+        console.log("Concert Info for: " + artist);
+        // check if there are any concerts or not
+        if (responseData.length === 0) {
+          console.log("No concerts found for " + artist);
+        } else {
+          for (var i = 0; i < responseData.length; i++) {
+            //   console.log("Venue: " + responseData[i].venue.name + " - " + responseData[i].datetime);
+            var location =
+              responseData[i].venue.city + ", " + responseData[i].venue.region;
+            console.log("Show ID: " + i);
+            console.log("               Venue: " + responseData[i].venue.name);
+            console.log("               " + responseData[i].datetime);
+            // TODO Fix outut of the date MM/DD/YY
+            //   console.log("     " + moment((responseData[i].datetime).format('MM/DD/YY')));
+            console.log("               " + location);
+            //   console.log("\n");
+          }
+          // TODO Add a better message when no concerts found
+        }
+      }
     })
     .catch(function(error) {
       if (error.response) {
@@ -63,18 +80,83 @@ function concertThis() {
     });
 }
 
-switch (operand) {
+function movieThis() {
+  console.log("In movieThis()");
+  axios
+    .get(
+      "http://www.omdbapi.com/?t=remember+the+titans&y=&plot=short&apikey=trilogy"
+    )
+    .then(function(response) {
+      console.log("The movie's title is: " + response.data.Title);
+      console.log("Released: " + response.data.Released);
+      console.log("The movie's IBMD rating is: " + response.data.imdbRating);
+
+      //   console.log(response.data.Ratings);
+      //   console.log(response.data.Ratings.Source['Rotten Tomatoes'].Value)
+      var sources = response.data.Ratings;
+      for (var i = 0; i < sources.length; i++) {
+        // console.log(sources[i].Source);
+        if (sources[i].Source === "Rotten Tomatoes") {
+          console.log(
+            "The movie's Rotten Tomatoes rating is: " + sources[i].Value
+          );
+        }
+      }
+
+      //   console.log("The movie's Rotten Tomatoes rating is: " + response.data.Ratings.Source['Rotten Tomatoe']);
+      console.log("Released: " + response.data.Released);
+
+      //   console.log(response.data);
+    });
+}
+
+function spotifyThis() {
+  if (!artist) {
+      artist = "The Sign";
+  } 
+  spotify.search({ type: "track", query: artist }, function(
+    err,
+    data
+  ) {
+    if (err) {
+      return console.log("Error occurred: " + err);
+    }
+
+    var items = data.tracks.items;
+
+    console.log(Object.getOwnPropertyNames(items));
+    console.log(items['0']);
+    // itemRecord = JSON.parse(items["0"].artists);
+
+    artistRecord = JSON.parse(JSON.stringify(items["0"].artists));
+    albumRecord = JSON.parse(JSON.stringify(items["0"].album));
+    previewUrl = JSON.parse(JSON.stringify(items["0"].preview_url));
+
+
+    console.log("Artist: " + artistRecord['0'].name);
+    console.log("Song: " + artist);
+    console.log("Preview Url: " + previewUrl); 
+    console.log("Album: " + albumRecord.name);
+
+  });
+
+}
+
+switch (command) {
   case "concert-this":
-    console.log("concert-this");
+    // console.log("concert-this");
     concertThis();
+
     break;
 
   case "spotify-this-song":
     console.log("spotify-this-song");
+    spotifyThis();
     break;
 
   case "movie-this":
     console.log("movie-this");
+    movieThis();
     break;
 
   case "do-what-it-says":
@@ -82,9 +164,13 @@ switch (operand) {
     break;
 
   default:
-    console.log("Invalid argument passed: " + operand);
+    if (typeof command === "undefined") {
+      console.log("No arguement passed:");
+    } else {
+      console.log("Invalid argument passed: " + command);
+    }
     console.log(
-      "Allowable -> concert-this | spotify-this-song | movie-this | do-what-it-says"
+      "concert-this | spotify-this-song | movie-this | do-what-it-says"
     );
     console.log("example: node lira concert-this Phish");
 }
