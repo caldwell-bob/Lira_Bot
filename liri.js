@@ -1,9 +1,13 @@
 require("dotenv").config();
 
+// fs is a core Node package for reading and writing files
+var fs = require("fs");
+
 // Include the axios npm package (Don't forget to run "npm install axios" in this folder first!)
 var axios = require("axios");
 var keys = require("./keys.js");
 
+// node-spotify-api is the Spoitify api used
 var Spotify = require("node-spotify-api");
 var spotify = new Spotify(keys.spotify);
 
@@ -38,8 +42,8 @@ function concertThis() {
             //   console.log("Venue: " + responseData[i].venue.name + " - " + responseData[i].datetime);
             var location =
               responseData[i].venue.city + ", " + responseData[i].venue.region;
-            console.log("Show ID: " + i);
-            console.log("               Venue: " + responseData[i].venue.name);
+            // console.log("Show ID: " + i);
+            console.log("Show ID:" + i  + "     Venue: " + responseData[i].venue.name);
             console.log("               " + responseData[i].datetime);
             // TODO Fix outut of the date MM/DD/YY
             //   console.log("     " + moment((responseData[i].datetime).format('MM/DD/YY')));
@@ -72,6 +76,32 @@ function concertThis() {
     });
 }
 
+function spotifyThis() {
+    if (!artist) {
+      artist = "The Sign";
+    }
+    spotify.search({ type: "track", query: artist }, function(err, data) {
+      if (err) {
+        return console.log("Error occurred: " + err);
+      }
+  
+      var items = data.tracks.items;
+  
+      console.log(Object.getOwnPropertyNames(items));
+      console.log(items["0"]);
+      // itemRecord = JSON.parse(items["0"].artists);
+  
+      artistRecord = JSON.parse(JSON.stringify(items["0"].artists));
+      albumRecord = JSON.parse(JSON.stringify(items["0"].album));
+      previewUrl = JSON.parse(JSON.stringify(items["0"].preview_url));
+  
+      console.log("Artist: " + artistRecord["0"].name);
+      console.log("Song: " + artist);
+      console.log("Preview Url: " + previewUrl);
+      console.log("Album: " + albumRecord.name);
+    });
+  }
+
 function movieThis() {
   console.log("In movieThis()");
   axios
@@ -102,67 +132,59 @@ function movieThis() {
     });
 }
 
-function spotifyThis() {
-  if (!artist) {
-      artist = "The Sign";
-  } 
-  spotify.search({ type: "track", query: artist }, function(
-    err,
-    data
-  ) {
-    if (err) {
-      return console.log("Error occurred: " + err);
+function doWhatItSays() {
+ 
+  fs.readFile("random.txt", "utf8", function(error, data) {
+    // If the code experiences any errors it will log the error to the console.
+    if (error) {
+      return console.log(error);
     }
 
-    var items = data.tracks.items;
+    // We will then print the contents of data
+    console.log(data);
 
-    console.log(Object.getOwnPropertyNames(items));
-    console.log(items['0']);
-    // itemRecord = JSON.parse(items["0"].artists);
+    // Then split it by commas (to make it more readable)
+    var dataArr = data.split(",");
+    command = dataArr[0];
+    artist = dataArr[1];
+    main();
 
-    artistRecord = JSON.parse(JSON.stringify(items["0"].artists));
-    albumRecord = JSON.parse(JSON.stringify(items["0"].album));
-    previewUrl = JSON.parse(JSON.stringify(items["0"].preview_url));
-
-
-    console.log("Artist: " + artistRecord['0'].name);
-    console.log("Song: " + artist);
-    console.log("Preview Url: " + previewUrl); 
-    console.log("Album: " + albumRecord.name);
-
+    // We will then re-display the content as an array for later use.
+    console.log(dataArr);
   });
+}
+
+function main() {
+    switch (command) {
+        case "concert-this":
+          concertThis();
+          break;
+      
+        case "spotify-this-song":
+          spotifyThis();
+          break;
+      
+        case "movie-this":
+          movieThis();
+          break;
+      
+        case "do-what-it-says":
+          doWhatItSays();
+          break;
+      
+        default:
+          if (typeof command === "undefined") {
+            console.log("No arguement passed:");
+          } else {
+            console.log("Invalid argument passed: " + command);
+          }
+          console.log(
+            "concert-this | spotify-this-song | movie-this | do-what-it-says"
+          );
+          console.log("example: node lira concert-this Phish");
+      }
 
 }
 
-switch (command) {
-  case "concert-this":
-    // console.log("concert-this");
-    concertThis();
+main();
 
-    break;
-
-  case "spotify-this-song":
-    console.log("spotify-this-song");
-    spotifyThis();
-    break;
-
-  case "movie-this":
-    console.log("movie-this");
-    movieThis();
-    break;
-
-  case "do-what-it-says":
-    console.log("do-what-it-says");
-    break;
-
-  default:
-    if (typeof command === "undefined") {
-      console.log("No arguement passed:");
-    } else {
-      console.log("Invalid argument passed: " + command);
-    }
-    console.log(
-      "concert-this | spotify-this-song | movie-this | do-what-it-says"
-    );
-    console.log("example: node lira concert-this Phish");
-}
