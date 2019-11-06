@@ -7,21 +7,21 @@
 - movie-this <>
 - do-what-it-says [reads command/input from random.txt]
 
-### concert-this <artist>
+### concert-this [artist]
 This command queries the Bands in Town Events apis for the artist passed in and either states there are no upcoming concerts, or lists the following for each tour date found:
 - Name of Venue
 - Venue Location
 - Date of Event
 
 
-### spotify-this-song <song>
+### spotify-this-song [song]
 This command queries the spotify api, for song passed in and displays the following:
 - Artist(s)
 - The song's name
 - A preview link of the song from Spotify
 - The album that the song is from
 
-### movie-this <movie>
+### movie-this [movie]
 This command queries the OMDB API and returns the following, based off the movie passed in:
 - Title of the movie.
 - Year the movie came out.
