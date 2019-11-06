@@ -1,27 +1,27 @@
 # Lira_Bot
-** Purpose: ** Lira_Bot is a command line tool which accepts certain keywords and then performs some behind scene vodoo, ala apis and the like, to display info based off the users inputs.
+**Purpose:** Lira_Bot is a command line tool which accepts certain keywords and then performs some behind scene vodoo, ala apis and the like, to display info based off the users inputs.
 
-#2 Command Options
+## Command Options
 - concert-this <artist>
 - spotify-this-song <song>
 - movie-this <>
 - do-what-it-says [reads command/input from random.txt]
 
-#3 concert-this <artist>
+### concert-this <artist>
 This command queries the Bands in Town Events apis for the artist passed in and either states there are no upcoming concerts, or lists the following for each tour date found:
 - Name of Venue
 - Venue Location
 - Date of Event
 
 
-#3 spotify-this-song <song>
+### spotify-this-song <song>
 This command queries the spotify api, for song passed in and displays the following:
 - Artist(s)
 - The song's name
 - A preview link of the song from Spotify
 - The album that the song is from
 
-#3 movie-this <movie>
+### movie-this <movie>
 This command queries the OMDB API and returns the following, based off the movie passed in:
 - Title of the movie.
 - Year the movie came out.
@@ -32,5 +32,5 @@ This command queries the OMDB API and returns the following, based off the movie
 - Plot of the movie.
 - Actors in the movie.
 
-#3 do-what-is-days
+### do-what-is-days
 This command will perform the command written in file random.txt.
