@@ -7,6 +7,9 @@
 - movie-this <>
 - do-what-it-says [reads command/input from random.txt]
 
+**No Command Passed In**
+![No Command Passed In](./images/liri_no_args_passed.png)
+
 ### concert-this [artist]
 This command queries the Bands in Town Events apis for the artist passed in and either states there are no upcoming concerts, or lists the following for each tour date found:
 - Name of Venue
@@ -55,17 +58,17 @@ This command queries the OMDB API and returns the following, based off the movie
 - Actors in the movie.
 
 **No Movie Passed In**
-![No Movie Passed In](./images/movie_this_no_args_passed.png);
+![No Movie Passed In](./images/movie_this_no_args_passed.png)
 
 **No Movie Details Found**
-![No Movie Details Found](./images/movie_this_no_movie_found.png);
+![No Movie Details Found](./images/movie_this_no_movie_found.png)
 
 **Movie Details Found**
-![Movie Details Found](./images/movie_this_movie_found.png);
+![Movie Details Found](./images/movie_this_movie_found.png)
 
 Note:  if no movie is passed in with the command, we are defaulting to searching for Mr. Nobody.
 
 ### do-what-is-days
 This command will perform the command written in file random.txt.
 **Do What It Says**
-![Do What It Says](./images/do_what_it_says.png);
+![Do What It Says](./images/do_what_it_says.png)
