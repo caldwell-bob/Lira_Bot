@@ -16,6 +16,9 @@ This command queries the Bands in Town Events apis for the artist passed in and 
 **No Artist Passed In**
 ![No artist passed in](./images/concert_this_no_args_passed.jpg)
 
+**Artist Not Found**
+![No artist concert info found](./images/concert_this_no_concert_found.png)
+
 
 ### spotify-this-song [song]
 This command queries the spotify api, for song passed in and displays the following:
