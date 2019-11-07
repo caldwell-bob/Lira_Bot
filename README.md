@@ -32,5 +32,7 @@ This command queries the OMDB API and returns the following, based off the movie
 - Plot of the movie.
 - Actors in the movie.
 
+Note:  if no movie is passed in with the command, we are defaulting to searching for Mr. Nobody.
+
 ### do-what-is-days
 This command will perform the command written in file random.txt.

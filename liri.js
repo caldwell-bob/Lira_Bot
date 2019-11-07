@@ -1,7 +1,11 @@
 require("dotenv").config();
 
+
 // fs is a core Node package for reading and writing files
 var fs = require("fs");
+
+// Include the moment npm package (Don't forget to run npm install moment in this folder first)
+var moment = require('moment');
 
 // Include the axios npm package (Don't forget to run "npm install axios" in this folder first!)
 var axios = require("axios");
@@ -44,13 +48,12 @@ function concertThis() {
               responseData[i].venue.city + ", " + responseData[i].venue.region;
             // console.log("Show ID: " + i);
             console.log(
-              "Show ID:" + i + "     Venue: " + responseData[i].venue.name
+              "\nShow ID:" + i + "     Venue: " + responseData[i].venue.name
             );
-            console.log("               " + responseData[i].datetime);
-            // TODO Fix outut of the date MM/DD/YY
-            //   console.log("     " + moment((responseData[i].datetime).format('MM/DD/YY')));
+            // console.log("               " + responseData[i].datetime);
+            var concertDate = moment(responseData[i].datetime).format("MM-DD-YYYY");
+            console.log("               " + "Date: " + concertDate);
             console.log("               " + location);
-            //   console.log("\n");
           }
           // TODO Add a better message when no concerts found
         }
@@ -99,37 +102,47 @@ function spotifyThis() {
       console.log("Song: " + artist);
       console.log("Preview Url: " + previewUrl);
       console.log("Album: " + albumRecord.name + "\n");
-
     }
-
   });
 }
 
 function movieThis() {
-  console.log("In movieThis()");
+  // console.log("In movieThis()");
+  //  remember+the+titans
+  if (!artist) {
+    artist = "Mr. Nobody";
+  }
   axios
     .get(
-      "http://www.omdbapi.com/?t=remember+the+titans&y=&plot=short&apikey=trilogy"
+      "http://www.omdbapi.com/?t=" + artist + "&y=&plot=short&apikey=trilogy"
     )
     .then(function(response) {
-      console.log("The movie's title is: " + response.data.Title);
-      console.log("Released: " + response.data.Released);
-      console.log("The movie's IBMD rating is: " + response.data.imdbRating);
+      // console.log(response);
+      // * Let's check if there is a movie search result found
+      dataCheck = response.data.Error;
+      if (dataCheck) {
+        console.log(dataCheck);
+      } else {
+        console.log("The movie's title is: " + response.data.Title);
+        console.log("Released: " + response.data.Released);
+        console.log("The movie's IBMD rating is: " + response.data.imdbRating);
 
-      //   console.log(response.data.Ratings);
-      //   console.log(response.data.Ratings.Source['Rotten Tomatoes'].Value)
-      var sources = response.data.Ratings;
-      for (var i = 0; i < sources.length; i++) {
-        // console.log(sources[i].Source);
-        if (sources[i].Source === "Rotten Tomatoes") {
-          console.log(
-            "The movie's Rotten Tomatoes rating is: " + sources[i].Value
-          );
+        //   console.log(response.data.Ratings);
+        //   console.log(response.data.Ratings.Source['Rotten Tomatoes'].Value)
+        var sources = response.data.Ratings;
+        for (var i = 0; i < sources.length; i++) {
+          // console.log(sources[i].Source);
+          if (sources[i].Source === "Rotten Tomatoes") {
+            console.log(
+              "The movie's Rotten Tomatoes rating is: " + sources[i].Value
+            );
+          }
         }
+        console.log("The movie was produced in " + response.data.Country);
+        console.log(response.data.Language + " is the language of the movie.");
+        console.log("The plot: " + response.data.Plot);
+        console.log("Actors: " + response.data.Actors);
       }
-
-      //   console.log("The movie's Rotten Tomatoes rating is: " + response.data.Ratings.Source['Rotten Tomatoe']);
-      console.log("Released: " + response.data.Released);
 
       //   console.log(response.data);
     });
