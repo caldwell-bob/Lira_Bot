@@ -1,11 +1,10 @@
 require("dotenv").config();
 
-
 // fs is a core Node package for reading and writing files
 var fs = require("fs");
 
 // Include the moment npm package (Don't forget to run npm install moment in this folder first)
-var moment = require('moment');
+var moment = require("moment");
 
 // Include the axios npm package (Don't forget to run "npm install axios" in this folder first!)
 var axios = require("axios");
@@ -17,68 +16,81 @@ var spotify = new Spotify(keys.spotify);
 
 var myArgvs = process.argv;
 var command = myArgvs[2];
-var artist = myArgvs[3];
+
+myArgvs.shift(); // remove node from array
+myArgvs.shift(); // remove liri from array
+myArgvs.shift(); // remove commad from array
+var artist = myArgvs.join(" ");
+
 
 function concertThis() {
-  // Then run a request with axios to the OMDB API with the movie specified
-  axios
-    .get(
-      "https://rest.bandsintown.com/artists/" +
-        artist +
-        "/events?app_id=codingbootcamp"
-    )
-    .then(function(response) {
-      // Print any non 200 status code
-      if (response.status != 200) {
-        console.log(response.status);
-      }
-      // check if there was an artist passed at cli
-      if (!artist) {
-        console.log("You aint got no artist...try again");
-      } else {
-        var responseData = response.data;
-        console.log("Concert Info for: " + artist);
-        // check if there are any concerts or not
-        if (responseData.length === 0) {
-          console.log("No concerts found for " + artist);
-        } else {
-          for (var i = 0; i < responseData.length; i++) {
-            //   console.log("Venue: " + responseData[i].venue.name + " - " + responseData[i].datetime);
-            var location =
-              responseData[i].venue.city + ", " + responseData[i].venue.region;
-            // console.log("Show ID: " + i);
-            console.log(
-              "\nShow ID:" + i + "     Venue: " + responseData[i].venue.name
-            );
-            // console.log("               " + responseData[i].datetime);
-            var concertDate = moment(responseData[i].datetime).format("MM-DD-YYYY");
-            console.log("               " + "Date: " + concertDate);
-            console.log("               " + location);
-          }
-          // TODO Add a better message when no concerts found
+  if (!artist) {
+    console.log("You need to pass in an artist name.");
+  } else {
+    // Then run a request with axios to the Bands in Town API with the movie specified
+    axios
+      .get(
+        "https://rest.bandsintown.com/artists/" +
+          artist +
+          "/events?app_id=codingbootcamp"
+      )
+      .then(function(response) {
+        // Print any non 200 status code
+        if (response.status != 200) {
+          console.log(response.status);
         }
-      }
-    })
-    .catch(function(error) {
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.log("---------------Data---------------");
-        console.log(error.response.data);
-        console.log("---------------Status---------------");
-        console.log(error.response.status);
-        console.log("---------------Status---------------");
-        console.log(error.response.headers);
-      } else if (error.request) {
-        // The request was made but no response was received
-        // `error.request` is an object that comes back with details pertaining to the error that occurred.
-        console.log(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.log("Error", error.message);
-      }
-      console.log(error.config);
-    });
+        // check if there was an artist passed at cli
+        if (!artist) {
+          console.log("You aint got no artist...try again");
+        } else {
+          var responseData = response.data;
+          console.log("Concert Info for: " + artist + "\n");
+          // check if there are any concerts or not
+          if (responseData.length === 0) {
+            console.log("No concerts found for " + artist);
+          } else {
+            for (var i = 0; i < responseData.length; i++) {
+              //   console.log("Venue: " + responseData[i].venue.name + " - " + responseData[i].datetime);
+              var location =
+                responseData[i].venue.city +
+                ", " +
+                responseData[i].venue.region;
+              
+              console.log(
+                "Venue: " + responseData[i].venue.name
+              );
+          
+              var concertDate = moment(responseData[i].datetime).format(
+                "MM-DD-YYYY"
+              );
+              console.log("Date: " + concertDate);
+              console.log(location + "\n");
+            }
+            // TODO Add a better message when no concerts found
+          }
+        }
+      })
+      .catch(function(error) {
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.log("---------------Data---------------");
+          console.log(error.response.data);
+          console.log("---------------Status---------------");
+          console.log(error.response.status);
+          console.log("---------------Status---------------");
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an object that comes back with details pertaining to the error that occurred.
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log("Error", error.message);
+        }
+        console.log(error.config);
+      });
+  }
 }
 
 function spotifyThis() {
@@ -86,8 +98,6 @@ function spotifyThis() {
     artist = "The Sign";
     var noArtistPassedIn = true;
   }
-
-  
   spotify.search({ type: "track", query: artist }, function(err, data) {
     if (err) {
       return console.log("Error occurred: " + err);
@@ -102,34 +112,27 @@ function spotifyThis() {
         artistRecord = JSON.parse(JSON.stringify(items[i].artists));
         albumRecord = JSON.parse(JSON.stringify(items[i].album));
         previewUrl = JSON.parse(JSON.stringify(items[i].preview_url));
-        
+
         if (artistRecord[0].name === "Ace of Base") {
           console.log("Artist: " + artistRecord[0].name);
           console.log("Song: " + artist);
           console.log("Preview Url: " + previewUrl);
           console.log("Album: " + albumRecord.name + "\n");
           break;
-
         }
-
       }
-
     } else {
       for (var i = 0; i < items.length; i++) {
         artistRecord = JSON.parse(JSON.stringify(items[i].artists));
         albumRecord = JSON.parse(JSON.stringify(items[i].album));
         previewUrl = JSON.parse(JSON.stringify(items[i].preview_url));
-  
+
         console.log("Artist: " + artistRecord[0].name);
         console.log("Song: " + artist);
         console.log("Preview Url: " + previewUrl);
         console.log("Album: " + albumRecord.name + "\n");
       }
-
     }
-
-
-    
   });
 }
 
@@ -181,18 +184,12 @@ function doWhatItSays() {
     if (error) {
       return console.log(error);
     }
-
-    // We will then print the contents of data
-    console.log(data);
-
-    // Then split it by commas (to make it more readable)
+   
+    // Split text of file at comma
     var dataArr = data.split(",");
     command = dataArr[0];
-    artist = dataArr[1];
+    artist = dataArr[1].slice(0, -1); // remove \n added by split
     main();
-
-    // We will then re-display the content as an array for later use.
-    console.log(dataArr);
   });
 }
 
