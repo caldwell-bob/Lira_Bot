@@ -19,6 +19,9 @@ This command queries the Bands in Town Events apis for the artist passed in and 
 **Artist Not Found**
 ![No artist concert info found](./images/concert_this_no_concert_found.png)
 
+**Artist Concert Info Found**
+![Concert Info Found](./images/concert_this_concert_found.png)
+
 
 ### spotify-this-song [song]
 This command queries the spotify api, for song passed in and displays the following:
@@ -26,6 +29,19 @@ This command queries the spotify api, for song passed in and displays the follow
 - The song's name
 - A preview link of the song from Spotify
 - The album that the song is from
+
+**No Song Passesd in**
+![No Song Passed in.][./images/spotify_this_song_no_args_passed.png]
+
+**No Song Found**
+![No Song Info Found][./images/spotify_this_song_no_song_found.png]
+
+**Song Info Found**
+![Song Info Found][./images/spotify_this_song_song_found_1_of_5.png]
+![Song Info Found][./images/spotify_this_song_song_found_2_of_5.png]
+![Song Info Found][./images/spotify_this_song_song_found_3_of_5.png]
+![Song Info Found][./images/spotify_this_song_song_found_4_of_5.png]
+![Song Info Found][./images/spotify_this_song_song_found_5_of_5.png]
 
 ### movie-this [movie]
 This command queries the OMDB API and returns the following, based off the movie passed in:
