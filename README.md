@@ -1,7 +1,7 @@
 # Lira_Bot
 **Purpose:** Lira_Bot is a command line node application which accepts certain keywords and then performs some behind scene vodoo, ala apis and the like, to display info based off the users inputs.
 
-##How To Use## The syntax to use Lira Bot is simple.  To use Lira Bot you need to type the following:  node liri <command> <search string>
+**How To Use** The syntax to use Lira Bot is simple.  To use Lira Bot you need to type the following:  node liri "<command> <search string>"
 
 ## Command Options
 - concert-this <artist>
