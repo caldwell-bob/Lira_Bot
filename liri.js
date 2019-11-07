@@ -84,7 +84,10 @@ function concertThis() {
 function spotifyThis() {
   if (!artist) {
     artist = "The Sign";
+    var noArtistPassedIn = true;
   }
+
+  
   spotify.search({ type: "track", query: artist }, function(err, data) {
     if (err) {
       return console.log("Error occurred: " + err);
@@ -93,16 +96,40 @@ function spotifyThis() {
     var items = data.tracks.items;
     console.log("There are " + items.length + " results from that search.");
 
-    for (var i = 0; i < items.length; i++) {
-      artistRecord = JSON.parse(JSON.stringify(items[i].artists));
-      albumRecord = JSON.parse(JSON.stringify(items[i].album));
-      previewUrl = JSON.parse(JSON.stringify(items[i].preview_url));
+    // only display all searches is an artist was passed in
+    if (noArtistPassedIn) {
+      for (var i = 0; i < items.length; i++) {
+        artistRecord = JSON.parse(JSON.stringify(items[i].artists));
+        albumRecord = JSON.parse(JSON.stringify(items[i].album));
+        previewUrl = JSON.parse(JSON.stringify(items[i].preview_url));
+        
+        if (artistRecord[0].name === "Ace of Base") {
+          console.log("Artist: " + artistRecord[0].name);
+          console.log("Song: " + artist);
+          console.log("Preview Url: " + previewUrl);
+          console.log("Album: " + albumRecord.name + "\n");
+          break;
 
-      console.log("Artist: " + artistRecord[0].name);
-      console.log("Song: " + artist);
-      console.log("Preview Url: " + previewUrl);
-      console.log("Album: " + albumRecord.name + "\n");
+        }
+
+      }
+
+    } else {
+      for (var i = 0; i < items.length; i++) {
+        artistRecord = JSON.parse(JSON.stringify(items[i].artists));
+        albumRecord = JSON.parse(JSON.stringify(items[i].album));
+        previewUrl = JSON.parse(JSON.stringify(items[i].preview_url));
+  
+        console.log("Artist: " + artistRecord[0].name);
+        console.log("Song: " + artist);
+        console.log("Preview Url: " + previewUrl);
+        console.log("Album: " + albumRecord.name + "\n");
+      }
+
     }
+
+
+    
   });
 }
 
