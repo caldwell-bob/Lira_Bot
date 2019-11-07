@@ -1,10 +1,12 @@
 # Lira_Bot
-**Purpose:** Lira_Bot is a command line tool which accepts certain keywords and then performs some behind scene vodoo, ala apis and the like, to display info based off the users inputs.
+**Purpose:** Lira_Bot is a command line node application which accepts certain keywords and then performs some behind scene vodoo, ala apis and the like, to display info based off the users inputs.
+
+##How To Use## The syntax to use Lira Bot is simple.  To use Lira Bot you need to type the following:  node liri <command> <search string>
 
 ## Command Options
 - concert-this <artist>
 - spotify-this-song <song>
-- movie-this <>
+- movie-this <movie>
 - do-what-it-says [reads command/input from random.txt]
 
 **No Command Passed In**
@@ -59,6 +61,7 @@ This command queries the OMDB API and returns the following, based off the movie
 
 **No Movie Passed In**
 ![No Movie Passed In](./images/movie_this_no_args_passed.png)
+Note:  if no movie is passed in with the command, we are defaulting to searching for Mr. Nobody.
 
 **No Movie Details Found**
 ![No Movie Details Found](./images/movie_this_no_movie_found.png)
@@ -66,7 +69,7 @@ This command queries the OMDB API and returns the following, based off the movie
 **Movie Details Found**
 ![Movie Details Found](./images/movie_this_movie_found.png)
 
-Note:  if no movie is passed in with the command, we are defaulting to searching for Mr. Nobody.
+
 
 ### do-what-is-days
 This command will perform the command written in file random.txt.
